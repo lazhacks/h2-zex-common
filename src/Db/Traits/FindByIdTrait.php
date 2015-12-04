@@ -2,11 +2,11 @@
 
 namespace Common\Db\Traits;
 
+use Common\Cache\RedisCache;
 use Common\Db\Exception;
 use Common\Db\Mapper\MapperInterface;
 use Common\Entity\EntityInterface;
 use Common\Service\ServiceInterface;
-use Zend\Cache\Storage\StorageInterface;
 
 /**
  * Find Entity Trait
@@ -32,12 +32,12 @@ trait FindByIdTrait
         }
 
         $cache = $this->getCache();
-        if ($cache instanceof StorageInterface && $cache->has($id)) {
+        if ($cache instanceof RedisCache && $cache->has($id)) {
             return $cache->get($id);
         }
 
         $entity = $this->getMapper()->findById($id);
-        if ($cache instanceof StorageInterface) {
+        if ($cache instanceof RedisCache) {
             $cache->set($id, $entity);
         }
 
@@ -45,7 +45,7 @@ trait FindByIdTrait
     }
 
     /**
-     * @return null|StorageInterface
+     * @return null|RedisCache
      */
     private function getCache()
     {
@@ -53,7 +53,7 @@ trait FindByIdTrait
             return null;
         }
 
-        if (!isset($this->cache) || $this->cache instanceof StorageInterface) {
+        if (!isset($this->cache) || !$this->cache instanceof RedisCache) {
             return null;
         }
 
