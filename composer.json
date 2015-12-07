@@ -2,6 +2,9 @@
     "name": "lazhacks/h2-zex-common",
     "type": "project",
     "homepage": "https://github.com/lazhacks/h2-zex-common",
+    "require": {
+        "guzzlehttp/guzzle": "^6.1"
+    },
     "autoload": {
         "psr-4": {
             "Common\\": "src/"
